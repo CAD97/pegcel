@@ -3,7 +3,13 @@ name = "pegcel-macros"
 version = "0.1.0"
 edition = "2018"
 
-authors = ["cad97 <cad97@cad97.com>"]
+authors = ["Christopher Durham (CAD97) <cad97@cad97.com>"]
+description = "A PEG parser generator for Syn"
+repository = "https://github.com/CAD97/pegcel"
+readme = "../../README.md"
+keywords = ["parser","PEG","syn","macros","syn-derive"]
+categories = ["development-tools::procedural-macro-helpers","parsing"]
+license = "MIT"
 
 [lib]
 proc-macro = true

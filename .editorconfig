@@ -4,3 +4,9 @@ root = true
 end_of_line = lf
 insert_final_newline = true
 charset = utf-8
+
+[*.iml]
+insert_final_newline = false
+
+[*.xml]
+insert_final_newline = false

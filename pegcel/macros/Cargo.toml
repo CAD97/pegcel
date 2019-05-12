@@ -1,0 +1,18 @@
+[package]
+name = "pegcel-macros"
+version = "0.1.0"
+edition = "2018"
+
+authors = ["cad97 <cad97@cad97.com>"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "0.15.34", features = ["extra-traits","full"] }
+quote = "0.6.12"
+proc-macro2 = "0.4.27"
+matches = "0.1.8"
+uuid = { version = "0.7.4", features = ["v4"] }
+indexmap = "1.0.2"
+itertools = "0.8.0"

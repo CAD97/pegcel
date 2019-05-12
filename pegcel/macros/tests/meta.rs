@@ -2,8 +2,7 @@
 mod manual_grammar;
 
 mod grammar {
-    use pegcel_macros::pegcel_syn;
-    pegcel_syn! {
+    pegcel_macros::pegcel_syn! {
         use syn
         use crate::manual_grammar::UnnamedItem
 

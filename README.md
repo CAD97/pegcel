@@ -64,7 +64,7 @@ opt-in to making it public will be offered in the future.
 ## Tutorial
 
 Actually, I'm uncertain how to explain how to use Pegcel!
-Hit me up at #1 and on [Discord] and ask me questions, and
+Hit me up at [#1] and on [Discord] and ask me questions, and
 then we can document it together.
 
   [Syn]: <https://github.com/dtolnay/syn>
@@ -72,3 +72,4 @@ then we can document it together.
   [UseTree]: <https://docs.rs/syn/0.15/syn/enum.UseTree.html>
   [PEG]: <https://en.wikipedia.org/wiki/Parsing_expression_grammar>
   [Discord]: <https://discord.gg/FuPE9JE>
+  [#1]: <https://github.com/CAD97/pegcel/issues/1>

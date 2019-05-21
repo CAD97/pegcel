@@ -1,7 +1,7 @@
 # Pegcel: a [PEG] parser generator for [Syn]
 
 [![Chat on Discord](https://img.shields.io/badge/-chat-26262b.svg?style=popout&logo=discord)][Discord]
-[![Travis status](https://img.shields.io/travis/CAD97/pegcel.svg?style=popout&logo=travis)][Travis]
+[![Travis status](https://img.shields.io/travis/com/CAD97/pegcel.svg?style=popout&logo=travis)][Travis]
 
 Pegcel does the boring parts of creating [Syn]-style [Syntax tree types] from a
 grammar for you, while still allowing you to have all of the power of manually

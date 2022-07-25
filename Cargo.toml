@@ -1,0 +1,30 @@
+[package]
+name = "pegcel"
+version = "0.2.0"
+edition = "2021"
+
+autoexamples = false
+
+[features]
+clone-impls = ["syn/clone-impls"]
+extra-traits = ["syn/extra-traits"]
+printing = ["syn/printing", "dep:quote"]
+
+[[example]]
+name = "item"
+
+[[example]]
+name = "punct"
+
+[[example]]
+name = "unit_struct"
+
+[dependencies]
+paste       = { version = "1.0.7",  default-features = false }
+proc-macro2 = { version = "1.0.40", default-features = false }
+quote       = { version = "1.0.20", default-features = false, optional = true }
+syn         = { version = "1.0.98", default-features = false, features = ["parsing"] }
+
+[dev-dependencies]
+macrotest = "1.0.9"
+syn = { version = "1.0.98", features = ["full"] }

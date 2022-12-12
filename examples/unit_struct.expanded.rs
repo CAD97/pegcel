@@ -70,10 +70,10 @@ impl ::pegcel::syn::parse::Parse for UnitStruct {
 impl ::pegcel::quote::ToTokens for UnitStruct {
     fn to_tokens(&self, tokens: &mut ::pegcel::proc_macro2::TokenStream) {
         use ::pegcel::__IterableToTokens;
-        self.attrs.to_tokens(tokens);
-        self.struct_token.to_tokens(tokens);
-        self.name.to_tokens(tokens);
-        self.semi_token.to_tokens(tokens);
+        (&self.attrs).to_tokens(tokens);
+        (&self.struct_token).to_tokens(tokens);
+        (&self.name).to_tokens(tokens);
+        (&self.semi_token).to_tokens(tokens);
     }
 }
 fn main() {}

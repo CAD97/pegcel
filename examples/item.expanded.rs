@@ -679,22 +679,22 @@ impl ::pegcel::syn::parse::Parse for Item {
 impl ::pegcel::quote::ToTokens for Item {
     fn to_tokens(&self, tokens: &mut ::pegcel::proc_macro2::TokenStream) {
         match self {
-            Item::Const(v) => v.to_tokens(tokens),
-            Item::Enum(v) => v.to_tokens(tokens),
-            Item::ExternCrate(v) => v.to_tokens(tokens),
-            Item::Fn(v) => v.to_tokens(tokens),
-            Item::ForeignMod(v) => v.to_tokens(tokens),
-            Item::Impl(v) => v.to_tokens(tokens),
-            Item::Macro(v) => v.to_tokens(tokens),
-            Item::Macro2(v) => v.to_tokens(tokens),
-            Item::Mod(v) => v.to_tokens(tokens),
-            Item::Static(v) => v.to_tokens(tokens),
-            Item::Struct(v) => v.to_tokens(tokens),
-            Item::Trait(v) => v.to_tokens(tokens),
-            Item::TraitAlias(v) => v.to_tokens(tokens),
-            Item::Type(v) => v.to_tokens(tokens),
-            Item::Union(v) => v.to_tokens(tokens),
-            Item::Use(v) => v.to_tokens(tokens),
+            Item::Const(v) => (&v).to_tokens(tokens),
+            Item::Enum(v) => (&v).to_tokens(tokens),
+            Item::ExternCrate(v) => (&v).to_tokens(tokens),
+            Item::Fn(v) => (&v).to_tokens(tokens),
+            Item::ForeignMod(v) => (&v).to_tokens(tokens),
+            Item::Impl(v) => (&v).to_tokens(tokens),
+            Item::Macro(v) => (&v).to_tokens(tokens),
+            Item::Macro2(v) => (&v).to_tokens(tokens),
+            Item::Mod(v) => (&v).to_tokens(tokens),
+            Item::Static(v) => (&v).to_tokens(tokens),
+            Item::Struct(v) => (&v).to_tokens(tokens),
+            Item::Trait(v) => (&v).to_tokens(tokens),
+            Item::TraitAlias(v) => (&v).to_tokens(tokens),
+            Item::Type(v) => (&v).to_tokens(tokens),
+            Item::Union(v) => (&v).to_tokens(tokens),
+            Item::Use(v) => (&v).to_tokens(tokens),
         }
     }
 }

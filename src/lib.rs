@@ -92,7 +92,7 @@ macro_rules! define_syntax {
                 fn to_tokens(&self, tokens: &mut $crate::proc_macro2::TokenStream) {
                     use $crate::__IterableToTokens;
                     $(
-                        self.$field.to_tokens(tokens);
+                        (&self.$field).to_tokens(tokens);
                     )*
                 }
             }
@@ -246,7 +246,7 @@ macro_rules! define_syntax {
                     fn to_tokens(&self, tokens: &mut $crate::proc_macro2::TokenStream) {
                         match self {
                             $(
-                                $Name::$Variant(v) => v.to_tokens(tokens),
+                                $Name::$Variant(v) => (&v).to_tokens(tokens),
                             )*
                         }
                     }
@@ -336,14 +336,14 @@ pub trait __IterableToTokens {
 }
 
 #[cfg(feature = "printing")]
-impl<T> __IterableToTokens for T
+impl<'a, T> __IterableToTokens for &'a T
 where
-    for<'a> &'a T: IntoIterator,
-    for<'a> <&'a T as IntoIterator>::Item: quote::ToTokens,
+    &'a T: IntoIterator,
+    <&'a T as IntoIterator>::Item: quote::ToTokens,
 {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         use quote::TokenStreamExt;
-        tokens.append_all(self)
+        tokens.append_all(*self)
     }
 }
 

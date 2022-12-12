@@ -2,7 +2,7 @@
 #[cfg(feature = "printing")]
 pub use quote;
 #[doc(hidden)]
-pub use {paste::paste, proc_macro2, syn};
+pub use {paste::paste, proc_macro2, std, syn};
 
 #[macro_export]
 macro_rules! define_syntax {
@@ -26,7 +26,7 @@ macro_rules! define_syntax {
 
         $crate::__clone_impls! {
             #[automatically_derived]
-            impl ::std::clone::Clone for $Name {
+            impl $crate::std::clone::Clone for $Name {
                 fn clone(&self) -> Self {
                     Self {
                         $(
@@ -39,8 +39,8 @@ macro_rules! define_syntax {
 
         $crate::__extra_traits! {
             #[automatically_derived]
-            impl ::std::fmt::Debug for $Name {
-                fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            impl $crate::std::fmt::Debug for $Name {
+                fn fmt(&self, f: &mut $crate::std::fmt::Formatter<'_>) -> $crate::std::fmt::Result {
                     f.debug_struct(::std::stringify!($Name))
                         $(
                             .field(::std::stringify!($field), &self.$field)
@@ -50,8 +50,8 @@ macro_rules! define_syntax {
             }
 
             #[automatically_derived]
-            impl ::std::hash::Hash for $Name {
-                fn hash<H: ::std::hash::Hasher>(&self, state: &mut H) {
+            impl $crate::std::hash::Hash for $Name {
+                fn hash<H: $crate::std::hash::Hasher>(&self, state: &mut H) {
                     $(
                         self.$field.hash(state);
                     )*
@@ -59,7 +59,7 @@ macro_rules! define_syntax {
             }
 
             #[automatically_derived]
-            impl ::std::cmp::PartialEq for $Name {
+            impl $crate::std::cmp::PartialEq for $Name {
                 fn eq(&self, other: &Self) -> bool {
                     $(
                         self.$field == other.$field
@@ -68,14 +68,14 @@ macro_rules! define_syntax {
             }
 
             #[automatically_derived]
-            impl ::std::cmp::Eq for $Name {
+            impl $crate::std::cmp::Eq for $Name {
             }
         }
 
         #[automatically_derived]
         impl $crate::syn::parse::Parse for $Name {
             fn parse(input: $crate::syn::parse::ParseStream) -> $crate::syn::parse::Result<Self> {
-                ::std::result::Result::Ok(Self {
+                $crate::std::result::Result::Ok(Self {
                     $(
                         $field: $crate::__switch! {
                             if { $($parse_fn)? }
@@ -117,7 +117,7 @@ macro_rules! define_syntax {
 
             $crate::__clone_impls! {
                 #[automatically_derived]
-                impl ::std::clone::Clone for $Name {
+                impl $crate::std::clone::Clone for $Name {
                     fn clone(&self) -> Self {
                         match self {
                             $(
@@ -130,8 +130,8 @@ macro_rules! define_syntax {
 
             $crate::__extra_traits! {
                 #[automatically_derived]
-                impl ::std::fmt::Debug for $Name {
-                    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                impl $crate::std::fmt::Debug for $Name {
+                    fn fmt(&self, f: &mut $crate::std::fmt::Formatter<'_>) -> $crate::std::fmt::Result {
                         match self {
                             $(
                                 $Name::$Variant(v) =>
@@ -144,12 +144,12 @@ macro_rules! define_syntax {
                 }
 
                 #[automatically_derived]
-                impl ::std::hash::Hash for $Name {
-                    fn hash<H: ::std::hash::Hasher>(&self, state: &mut H) {
+                impl $crate::std::hash::Hash for $Name {
+                    fn hash<H: $crate::std::hash::Hasher>(&self, state: &mut H) {
                         match self {
                             $(
                                 $Name::$Variant(v) => {
-                                    ::std::mem::discriminant(self).hash(state);
+                                    $crate::std::mem::discriminant(self).hash(state);
                                     v.hash(state);
                                 },
                             )*
@@ -158,7 +158,7 @@ macro_rules! define_syntax {
                 }
 
                 #[automatically_derived]
-                impl ::std::cmp::PartialEq for $Name {
+                impl $crate::std::cmp::PartialEq for $Name {
                     fn eq(&self, other: &Self) -> bool {
                         match (self, other) {
                             $(
@@ -170,7 +170,7 @@ macro_rules! define_syntax {
                 }
 
                 #[automatically_derived]
-                impl ::std::cmp::Eq for $Name {}
+                impl $crate::std::cmp::Eq for $Name {}
             }
 
             $(
@@ -196,9 +196,9 @@ macro_rules! define_syntax {
             impl $crate::syn::parse::Parse for $Name {
                 fn parse(input: $crate::syn::parse::ParseStream) -> $crate::syn::parse::Result<Self> {
                     use $crate::syn::parse::discouraged::Speculative;
-                    let mut best_guess = ::std::option::Option::None;
+                    let mut best_guess = $crate::std::option::Option::None;
+                    let mut best_guess_cursor = input.cursor();
                     let mut best_guess_variant = "";
-                    let mut best_guess_remaining = ::std::primitive::usize::MAX;
                     $({
                         let fork = input.fork();
                         match fork.parse::<$crate::__switch! {
@@ -206,25 +206,35 @@ macro_rules! define_syntax {
                             do { $($NameVariant)? }
                             else { [<$Name $Variant>] }
                         }>() {
-                            ::std::result::Result::Ok(v) => {
+                            $crate::std::result::Result::Ok(v) => {
                                 input.advance_to(&fork);
-                                return ::std::result::Result::Ok($Name::$Variant(v));
+                                return $crate::std::result::Result::Ok($Name::$Variant(v));
                             }
-                            ::std::result::Result::Err(e) => {
-                                // TODO: ask syn for a Cursor::len to optimize this
-                                let this_guess_remaining =
-                                    fork.cursor().token_stream().into_iter().count();
-                                if this_guess_remaining < best_guess_remaining {
-                                    best_guess = ::std::option::Option::Some(e);
-                                    best_guess_variant = ::std::stringify!($Variant);
-                                    best_guess_remaining = this_guess_remaining;
+                            $crate::std::result::Result::Err(e) => {
+                                let this_guess_cursor = fork.cursor();
+                                if this_guess_cursor > best_guess_cursor {
+                                    // If the cursor is further along, then this error occurred
+                                    // later in the input. Use it instead of the previous error,
+                                    // as the more successful parse is likely to be intended.
+                                    best_guess = $crate::std::option::Option::Some(e);
+                                    best_guess_variant = $crate::std::stringify!($Variant);
+                                    best_guess_cursor = this_guess_cursor;
+                                } else if this_guess_cursor == best_guess_cursor {
+                                    // If the cursor is the same, then both errors occurred at the
+                                    // "same" position. Combine the errors to avoid losing information.
+                                    if let $crate::std::option::Option::Some(existing) = &mut best_guess {
+                                        existing.combine(e);
+                                    } else {
+                                        // There's no existing error, so just use the new one.
+                                        best_guess = $crate::std::option::Option::Some(e);
+                                    }
                                 }
                             },
                         }
                     })*
-                    ::std::result::Result::Err(input.error(format_args!(
+                    $crate::std::result::Result::Err(input.error(format_args!(
                         "expected {} but failed to parse any variant; best attempt was {} with {}",
-                        ::std::stringify!($Name),
+                        $crate::std::stringify!($Name),
                         best_guess_variant,
                         best_guess.unwrap(),
                     )))

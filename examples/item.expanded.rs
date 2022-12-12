@@ -23,7 +23,7 @@ enum Item {
     Use(ItemUse),
 }
 #[automatically_derived]
-impl ::std::clone::Clone for Item {
+impl ::pegcel::std::clone::Clone for Item {
     fn clone(&self) -> Self {
         match self {
             Item::Const(v) => Item::Const(v.clone()),
@@ -46,8 +46,11 @@ impl ::std::clone::Clone for Item {
     }
 }
 #[automatically_derived]
-impl ::std::fmt::Debug for Item {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+impl ::pegcel::std::fmt::Debug for Item {
+    fn fmt(
+        &self,
+        f: &mut ::pegcel::std::fmt::Formatter<'_>,
+    ) -> ::pegcel::std::fmt::Result {
         match self {
             Item::Const(v) => f.debug_tuple("Const").field(v).finish(),
             Item::Enum(v) => f.debug_tuple("Enum").field(v).finish(),
@@ -69,78 +72,78 @@ impl ::std::fmt::Debug for Item {
     }
 }
 #[automatically_derived]
-impl ::std::hash::Hash for Item {
-    fn hash<H: ::std::hash::Hasher>(&self, state: &mut H) {
+impl ::pegcel::std::hash::Hash for Item {
+    fn hash<H: ::pegcel::std::hash::Hasher>(&self, state: &mut H) {
         match self {
             Item::Const(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Enum(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::ExternCrate(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Fn(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::ForeignMod(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Impl(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Macro(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Macro2(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Mod(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Static(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Struct(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Trait(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::TraitAlias(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Type(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Union(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
             Item::Use(v) => {
-                ::std::mem::discriminant(self).hash(state);
+                ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
         }
     }
 }
 #[automatically_derived]
-impl ::std::cmp::PartialEq for Item {
+impl ::pegcel::std::cmp::PartialEq for Item {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Item::Const(lhs), Item::Const(rhs)) => lhs == rhs,
@@ -164,7 +167,7 @@ impl ::std::cmp::PartialEq for Item {
     }
 }
 #[automatically_derived]
-impl ::std::cmp::Eq for Item {}
+impl ::pegcel::std::cmp::Eq for Item {}
 #[automatically_derived]
 impl From<ItemConst> for Item {
     fn from(v: ItemConst) -> Self {
@@ -267,26 +270,29 @@ impl ::pegcel::syn::parse::Parse for Item {
         input: ::pegcel::syn::parse::ParseStream,
     ) -> ::pegcel::syn::parse::Result<Self> {
         use ::pegcel::syn::parse::discouraged::Speculative;
-        let mut best_guess = ::std::option::Option::None;
+        let mut best_guess = ::pegcel::std::option::Option::None;
+        let mut best_guess_cursor = input.cursor();
         let mut best_guess_variant = "";
-        let mut best_guess_remaining = ::std::primitive::usize::MAX;
         {
             let fork = input.fork();
             match fork.parse::<ItemConst>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Const(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Const(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Const";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -294,20 +300,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemEnum>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Enum(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Enum(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Enum";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -315,20 +324,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemExternCrate>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::ExternCrate(v));
+                    return ::pegcel::std::result::Result::Ok(Item::ExternCrate(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "ExternCrate";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -336,20 +348,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemFn>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Fn(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Fn(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Fn";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -357,20 +372,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemForeignMod>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::ForeignMod(v));
+                    return ::pegcel::std::result::Result::Ok(Item::ForeignMod(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "ForeignMod";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -378,20 +396,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemImpl>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Impl(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Impl(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Impl";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -399,20 +420,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemMacro>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Macro(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Macro(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Macro";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -420,20 +444,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemMacro2>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Macro2(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Macro2(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Macro2";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -441,20 +468,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemMod>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Mod(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Mod(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Mod";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -462,20 +492,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemStatic>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Static(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Static(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Static";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -483,20 +516,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemStruct>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Struct(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Struct(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Struct";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -504,20 +540,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemTrait>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Trait(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Trait(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Trait";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -525,20 +564,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemTraitAlias>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::TraitAlias(v));
+                    return ::pegcel::std::result::Result::Ok(Item::TraitAlias(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "TraitAlias";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -546,20 +588,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemType>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Type(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Type(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Type";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -567,20 +612,23 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemUnion>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Union(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Union(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Union";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
@@ -588,25 +636,28 @@ impl ::pegcel::syn::parse::Parse for Item {
         {
             let fork = input.fork();
             match fork.parse::<ItemUse>() {
-                ::std::result::Result::Ok(v) => {
+                ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
-                    return ::std::result::Result::Ok(Item::Use(v));
+                    return ::pegcel::std::result::Result::Ok(Item::Use(v));
                 }
-                ::std::result::Result::Err(e) => {
-                    let this_guess_remaining = fork
-                        .cursor()
-                        .token_stream()
-                        .into_iter()
-                        .count();
-                    if this_guess_remaining < best_guess_remaining {
-                        best_guess = ::std::option::Option::Some(e);
+                ::pegcel::std::result::Result::Err(e) => {
+                    let this_guess_cursor = fork.cursor();
+                    if this_guess_cursor > best_guess_cursor {
+                        best_guess = ::pegcel::std::option::Option::Some(e);
                         best_guess_variant = "Use";
-                        best_guess_remaining = this_guess_remaining;
+                        best_guess_cursor = this_guess_cursor;
+                    } else if this_guess_cursor == best_guess_cursor {
+                        if let ::pegcel::std::option::Option::Some(existing)
+                            = &mut best_guess {
+                            existing.combine(e);
+                        } else {
+                            best_guess = ::pegcel::std::option::Option::Some(e);
+                        }
                     }
                 }
             }
         }
-        ::std::result::Result::Err(
+        ::pegcel::std::result::Result::Err(
             input
                 .error(
                     ::core::fmt::Arguments::new_v1(

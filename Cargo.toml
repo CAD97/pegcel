@@ -20,11 +20,11 @@ name = "punct"
 name = "unit_struct"
 
 [dependencies]
-paste       = { version = "1.0.7",  default-features = false }
-proc-macro2 = { version = "1.0.40", default-features = false }
-quote       = { version = "1.0.20", default-features = false, optional = true }
-syn         = { version = "1.0.98", default-features = false, features = ["parsing"] }
+paste = { version = "1.0.9", default-features = false }
+proc-macro2 = { version = "1.0.47", default-features = false }
+quote = { version = "1.0.21", default-features = false, optional = true }
+syn = { version = "1.0.105", default-features = false, features = ["parsing"] }
 
 [dev-dependencies]
 macrotest = "1.0.9"
-syn = { version = "1.0.98", features = ["full"] }
+syn = { version = "1.0.105", features = ["full"] }

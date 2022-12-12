@@ -6,6 +6,8 @@ edition = "2021"
 autoexamples = false
 
 [features]
+default = ["clone-impls", "printing"]
+
 clone-impls = ["syn/clone-impls"]
 extra-traits = ["syn/extra-traits"]
 printing = ["syn/printing", "dep:quote"]

@@ -1,8 +1,8 @@
 //! syn::Item
 use syn::{
     ItemConst, ItemEnum, ItemExternCrate, ItemFn, ItemForeignMod, ItemImpl, ItemMacro,
-    ItemMacro2, ItemMod, ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType,
-    ItemUnion, ItemUse,
+    ItemMod, ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType, ItemUnion,
+    ItemUse,
 };
 enum Item {
     Const(ItemConst),
@@ -12,7 +12,6 @@ enum Item {
     ForeignMod(ItemForeignMod),
     Impl(ItemImpl),
     Macro(ItemMacro),
-    Macro2(ItemMacro2),
     Mod(ItemMod),
     Static(ItemStatic),
     Struct(ItemStruct),
@@ -33,7 +32,6 @@ impl ::pegcel::std::clone::Clone for Item {
             Item::ForeignMod(v) => Item::ForeignMod(v.clone()),
             Item::Impl(v) => Item::Impl(v.clone()),
             Item::Macro(v) => Item::Macro(v.clone()),
-            Item::Macro2(v) => Item::Macro2(v.clone()),
             Item::Mod(v) => Item::Mod(v.clone()),
             Item::Static(v) => Item::Static(v.clone()),
             Item::Struct(v) => Item::Struct(v.clone()),
@@ -59,7 +57,6 @@ impl ::pegcel::std::fmt::Debug for Item {
             Item::ForeignMod(v) => f.debug_tuple("ForeignMod").field(v).finish(),
             Item::Impl(v) => f.debug_tuple("Impl").field(v).finish(),
             Item::Macro(v) => f.debug_tuple("Macro").field(v).finish(),
-            Item::Macro2(v) => f.debug_tuple("Macro2").field(v).finish(),
             Item::Mod(v) => f.debug_tuple("Mod").field(v).finish(),
             Item::Static(v) => f.debug_tuple("Static").field(v).finish(),
             Item::Struct(v) => f.debug_tuple("Struct").field(v).finish(),
@@ -100,10 +97,6 @@ impl ::pegcel::std::hash::Hash for Item {
                 v.hash(state);
             }
             Item::Macro(v) => {
-                ::pegcel::std::mem::discriminant(self).hash(state);
-                v.hash(state);
-            }
-            Item::Macro2(v) => {
                 ::pegcel::std::mem::discriminant(self).hash(state);
                 v.hash(state);
             }
@@ -153,7 +146,6 @@ impl ::pegcel::std::cmp::PartialEq for Item {
             (Item::ForeignMod(lhs), Item::ForeignMod(rhs)) => lhs == rhs,
             (Item::Impl(lhs), Item::Impl(rhs)) => lhs == rhs,
             (Item::Macro(lhs), Item::Macro(rhs)) => lhs == rhs,
-            (Item::Macro2(lhs), Item::Macro2(rhs)) => lhs == rhs,
             (Item::Mod(lhs), Item::Mod(rhs)) => lhs == rhs,
             (Item::Static(lhs), Item::Static(rhs)) => lhs == rhs,
             (Item::Struct(lhs), Item::Struct(rhs)) => lhs == rhs,
@@ -208,12 +200,6 @@ impl From<ItemImpl> for Item {
 impl From<ItemMacro> for Item {
     fn from(v: ItemMacro) -> Self {
         Item::Macro(v)
-    }
-}
-#[automatically_derived]
-impl From<ItemMacro2> for Item {
-    fn from(v: ItemMacro2) -> Self {
-        Item::Macro2(v)
     }
 }
 #[automatically_derived]
@@ -443,30 +429,6 @@ impl ::pegcel::syn::parse::Parse for Item {
         }
         {
             let fork = input.fork();
-            match fork.parse::<ItemMacro2>() {
-                ::pegcel::std::result::Result::Ok(v) => {
-                    input.advance_to(&fork);
-                    return ::pegcel::std::result::Result::Ok(Item::Macro2(v));
-                }
-                ::pegcel::std::result::Result::Err(e) => {
-                    let this_guess_cursor = fork.cursor();
-                    if this_guess_cursor > best_guess_cursor {
-                        best_guess = ::pegcel::std::option::Option::Some(e);
-                        best_guess_variant = "Macro2";
-                        best_guess_cursor = this_guess_cursor;
-                    } else if this_guess_cursor == best_guess_cursor {
-                        if let ::pegcel::std::option::Option::Some(existing)
-                            = &mut best_guess {
-                            existing.combine(e);
-                        } else {
-                            best_guess = ::pegcel::std::option::Option::Some(e);
-                        }
-                    }
-                }
-            }
-        }
-        {
-            let fork = input.fork();
             match fork.parse::<ItemMod>() {
                 ::pegcel::std::result::Result::Ok(v) => {
                     input.advance_to(&fork);
@@ -660,17 +622,9 @@ impl ::pegcel::syn::parse::Parse for Item {
         ::pegcel::std::result::Result::Err(
             input
                 .error(
-                    ::core::fmt::Arguments::new_v1(
-                        &[
-                            "expected ",
-                            " but failed to parse any variant; best attempt was ",
-                            " with ",
-                        ],
-                        &[
-                            ::core::fmt::ArgumentV1::new_display(&"Item"),
-                            ::core::fmt::ArgumentV1::new_display(&best_guess_variant),
-                            ::core::fmt::ArgumentV1::new_display(&best_guess.unwrap()),
-                        ],
+                    format_args!(
+                        "expected {0} but failed to parse any variant; best attempt was {1} with {2}",
+                        "Item", best_guess_variant, best_guess.unwrap()
                     ),
                 ),
         )
@@ -686,7 +640,6 @@ impl ::pegcel::quote::ToTokens for Item {
             Item::ForeignMod(v) => (&v).to_tokens(tokens),
             Item::Impl(v) => (&v).to_tokens(tokens),
             Item::Macro(v) => (&v).to_tokens(tokens),
-            Item::Macro2(v) => (&v).to_tokens(tokens),
             Item::Mod(v) => (&v).to_tokens(tokens),
             Item::Static(v) => (&v).to_tokens(tokens),
             Item::Struct(v) => (&v).to_tokens(tokens),

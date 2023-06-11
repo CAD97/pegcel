@@ -1,8 +1,8 @@
 //! syn::Item
 
 use syn::{
-    ItemConst, ItemEnum, ItemExternCrate, ItemFn, ItemForeignMod, ItemImpl, ItemMacro, ItemMacro2,
-    ItemMod, ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType, ItemUnion, ItemUse,
+    ItemConst, ItemEnum, ItemExternCrate, ItemFn, ItemForeignMod, ItemImpl, ItemMacro, ItemMod,
+    ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType, ItemUnion, ItemUse,
 };
 
 pegcel::define_syntax! {
@@ -14,7 +14,6 @@ pegcel::define_syntax! {
         ForeignMod,
         Impl,
         Macro,
-        Macro2,
         Mod,
         Static,
         Struct,
